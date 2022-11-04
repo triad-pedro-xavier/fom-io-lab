@@ -39,7 +39,8 @@ function App() {
                 textFieldCustomComp: true,
                 numberFieldCustomComp: true,
                 fotografiaFieldCustomComp: true,
-                subformularioFieldCustomComp: true
+                subformularioFieldCustomComp: true,
+                assinaturaFieldCustomComp: true
               }
             },
             // basic: false,
