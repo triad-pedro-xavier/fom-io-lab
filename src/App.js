@@ -1,21 +1,55 @@
+import { Components, FormBuilder } from '@formio/react';
+import { useState } from 'react';
 import './App.css';
-import { Formio} from '@formio/react';
-import FormioContrib from '@formio/contrib';
-import Navigation from './components/Navigation';
-import { Route, Router, Routes } from 'react-router-dom';
-import Home from './components/Home';
-import Components from './components/Components';
-Formio.use(FormioContrib);
+import components from "./formbuilder";
+
+Components.setComponents(components);
 
 function App() {
-  console.log(FormioContrib);
+  const [jsonSchema, setSchema] = useState({})
   return (
     <div className="App">
-      <Navigation/>
-      <Routes basename={'/react-app-starterkit'}>
-        <Route path='/' element={<Home />}></Route>
-        <Route path='components' element={<Components />}></Route>
-      </Routes>      
+      <button onClick={() => console.log(jsonSchema)}>JSON</button>
+      <FormBuilder form={jsonSchema}
+        onChange={(schema) => setSchema(schema)}
+        options={{
+          // noNewEdit: true,
+	        noDefaultSubmitButton: true,
+          language: 'pt',
+          i18n: {
+          pt: {
+            'Drag and Drop a form component': 'Arrate os itens para formar o formulario',
+            'Search field(s)': 'Procure os campo(s)',
+            'Component': '',
+            'Save': 'Salvar',
+            'Cancel': 'Cancelar',
+            'Remove': 'Remover',
+            'Preview': 'Pré-visualização',
+            'Help': 'Ajuda',
+            'Copy': 'Copiar',
+            'Edit': 'Editar',
+            }
+          },
+          builder: {
+            inputs: {
+              title: 'Campos',
+              weight: 10,
+              default: true,
+              components: {
+                textFieldCustomComp: true,
+                numberFieldCustomComp: true,
+                fotografiaFieldCustomComp: true,
+                subformularioFieldCustomComp: true
+              }
+            },
+            // basic: false,
+            // advanced: false,
+            // resource: false,
+            // premium: false,
+            // layout: false,
+            // data: false
+          }
+        }} />
     </div>
   );
 }

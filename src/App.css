@@ -1,5 +1,13 @@
 @import '~bootstrap/dist/css/bootstrap.css';
 @import '~formiojs/dist/formio.full.min.css';
+#group-container-inputs {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.builder-group-button {
+  width: 100%;
+}
 .App {
   /* text-align: center; */
   font-size: 1rem;
