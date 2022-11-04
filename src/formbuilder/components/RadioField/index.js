@@ -6,7 +6,7 @@ const RadioFieldCustomComp = class extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value
+      data: props.component.data
     };
   }
 
@@ -20,10 +20,18 @@ const RadioFieldCustomComp = class extends Component {
   render() {
     return (
       <div>
-       <input type="radio" id="html" name="fav_language"/>
-       <label for="html">HTML</label><br/>
-       <input type="radio"/>
-       <label for="css">CSS</label><br/>
+        {this.state.data && this.state.data.map(el => {
+          return <>
+            <div role="group" class="form-radio radio">
+              <div class="checkbox  form-check">
+                <label class="form-check-label label-position-right">
+                  <input role="radio" name='radio-field' value="" class="form-check-input" type="radio"/>
+                    <span>{el.label}</span>
+                </label>
+              </div>
+            </div>
+          </>
+        })}
       </div>
     );
   }
@@ -93,11 +101,23 @@ export default class RadioField extends ReactComponent {
           key: "mensagemAjuda",
         },
         {
-          type: "checkbox",
+          type: 'datagrid',
           input: true,
-          label: "Reaproveitar Resposta Anterior",
-          weight: 12,
-          key: "reaproveitar",
+          label: 'Opções',
+          key: 'data',
+          weight: 10,
+          reorder: true,
+          components: [{
+            label: 'Label',
+            key: 'label',
+            input: true,
+            type: 'textfield'
+          }, {
+            label: 'Valor',
+            key: 'value',
+            input: true,
+            type: 'textfield',
+          }]
         },
         {
           type: "checkbox",
@@ -111,7 +131,7 @@ export default class RadioField extends ReactComponent {
 
   attachReact(element) {
     return ReactDOM.render(
-      <NumberFieldCustomComp
+      <RadioFieldCustomComp
         component={this.component}
         value={this.dataValue}
         onChange={this.updateValue}

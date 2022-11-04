@@ -6,21 +6,15 @@ const SubformularioFieldCustomComp = class extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value
+      formulario: props.component.formulario
     };
+    console.log(props.component)
   }
-
-  setValue = () => {
-    this.setState(
-      prevState => ({ value: !prevState.value }),
-      () => this.props.onChange(null, this.state.value)
-    );
-  };
 
   render() {
     return (
       <div>
-        <input disabled value='Formulário GLP' className='form-control' />
+        <input disabled value={this.state.formulario} className='form-control'/>
       </div>
     );
   }
@@ -85,10 +79,10 @@ export default class SubformularioField extends ReactComponent {
           data: {
             values: [{
               label: 'Formulário GLP',
-              value: 'GLP'
+              value: 'Formulário GLP'
             }, {
               label: 'Formulário Automotivo',
-              value: 'AUTO'
+              value: 'Formulário Automotivo'
             }]
           }
         },

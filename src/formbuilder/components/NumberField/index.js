@@ -5,17 +5,7 @@ import { ReactComponent } from "@formio/react";
 const NumberFieldCustomComp = class extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: props.value
-    };
   }
-
-  setValue = () => {
-    this.setState(
-      prevState => ({ value: !prevState.value }),
-      () => this.props.onChange(null, this.state.value)
-    );
-  };
 
   render() {
     return (

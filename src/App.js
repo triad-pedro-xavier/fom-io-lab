@@ -39,9 +39,10 @@ function App() {
                 textFieldCustomComp: true,
                 numberFieldCustomComp: true,
                 fotografiaFieldCustomComp: true,
-                subformularioFieldCustomComp: true
+                subformularioFieldCustomComp: true,
+                radioFieldCustomComp: true
               }
-            },
+            },  
             // basic: false,
             // advanced: false,
             // resource: false,

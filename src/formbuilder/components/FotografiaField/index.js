@@ -5,18 +5,7 @@ import { ReactComponent } from "@formio/react";
 const FotografiaFieldCustomComp = class extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: props.value
-    };
   }
-
-  setValue = () => {
-    this.setState(
-      prevState => ({ value: !prevState.value }),
-      () => this.props.onChange(null, this.state.value)
-    );
-  };
-
   render() {
     return (
       <div >
