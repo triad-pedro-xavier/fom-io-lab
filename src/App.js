@@ -40,15 +40,16 @@ function App() {
                 numberFieldCustomComp: true,
                 fotografiaFieldCustomComp: true,
                 subformularioFieldCustomComp: true,
-                radioFieldCustomComp: true
+                radioFieldCustomComp: true,
+                inputFileFieldCustomComp: true
               }
             },  
-            // basic: false,
-            // advanced: false,
-            // resource: false,
-            // premium: false,
-            // layout: false,
-            // data: false
+            basic: false,
+            advanced: false,
+            resource: false,
+            premium: false,
+            layout: false,
+            data: false
           }
         }} />
     </div>
