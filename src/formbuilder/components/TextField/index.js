@@ -1,26 +1,92 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { ReactComponent } from "@formio/react";
+import { ReactComponent } from "@formio/react/";
 
 const TextFieldCustomComp = class extends Component {
   constructor(props) {
     super(props);
+    this.preview = React.createRef();
+    this.minError = React.createRef();
+    this.maxError = React.createRef();
+    this.obrigatorioLabel = React.createRef();
+    this.rastrearLabel = React.createRef();
+    this.reaproveitarLabel = React.createRef();
+
     this.state = {
-      value: props.value
+      value: props.value || props.component.valorPadrao,
+      component: props.component
     };
   }
 
-  setValue = () => {
+  setValue = (e) => {
+    const inputValue = e.target.value;
+    this.validatePreview(inputValue);
     this.setState(
-      prevState => ({ value: !prevState.value }),
-      () => this.props.onChange(null, this.state.value)
+      prevState => ({
+        ...prevState,
+        value: inputValue
+      }), () => this.props.onChange(null, this.state.value)
     );
   };
+
+  componentDidMount() {
+    this.validatePreview(this.state.value || '');
+    if (this.state.component.obrigatorio) this.obrigatorioLabel.current.classList.remove('d-none');
+    else this.obrigatorioLabel.current.classList.add('d-none');
+
+    if (this.state.component.rastrear) this.rastrearLabel.current.classList.remove('d-none');
+    else this.rastrearLabel.current.classList.add('d-none');
+
+    if (this.state.component.reaproveitar) this.reaproveitarLabel.current.classList.remove('d-none');
+    else this.reaproveitarLabel.current.classList.add('d-none');
+
+  }
+
+  validatePreview(inputValue) {
+    const min = this.state.component.min || 0;
+    const max = this.state.component.max || Number.MAX_SAFE_INTEGER;
+    const isMax = inputValue.length > max;
+    const isMin = inputValue.length < min;
+    const prevEl = this.preview.current;
+    const minErrorEl = this.minError.current;
+    const maxErrorEl = this.maxError.current;
+
+    prevEl.classList.remove('is-invalid');
+    minErrorEl.classList.add('d-none');
+    maxErrorEl.classList.add('d-none');
+    if (isMin) {
+      minErrorEl.classList.remove('d-none');
+      prevEl.classList.add('is-invalid');
+    }
+
+    if (isMax) {
+      maxErrorEl.classList.remove('d-none');
+      prevEl.classList.add('is-invalid');
+    }
+
+  }
 
   render() {
     return (
       <div>
-        <input type='text' className='form-control'/>
+        <div className="d-flex" style={{height: '30px', gap: '5px'}}>
+          <p>{this.state.component.titulo}</p>
+          <span ref={this.obrigatorioLabel} style={{ color: 'red' }}>*</span>
+          <i ref={this.rastrearLabel} class="bi bi-geo-alt-fill" ></i>
+          <i ref={this.reaproveitarLabel} class="bi bi-arrow-clockwise"></i>
+        </div>
+        <div>
+          <input type="text" id="prev" className="form-control" placeholder={this.state.component.nome}
+            value={this.state.value} onChange={this.setValue} ref={this.preview} />
+        </div>
+        <div>
+          <small id="min-error" className="text-danger d-none" ref={this.minError}>
+            Mensagem deve conter no mínimo {this.state.component.min} caracteres.
+          </small>
+          <small id="max-error" className="text-danger d-none" ref={this.maxError}>
+            Mensagem deve conter no máximo {this.state.component.max} caracteres.
+          </small>
+        </div>
       </div>
     );
   }
@@ -31,7 +97,7 @@ export default class TextField extends ReactComponent {
     return {
       title: "Texto",
       icon: "square",
-      group: "Data",
+      group: "inputs",
       documentation: "",
       weight: -10,
       schema: TextField.schema()
@@ -41,39 +107,25 @@ export default class TextField extends ReactComponent {
   static schema() {
     return ReactComponent.schema({
       type: "textFieldCustomComp",
-      label: "Nome do Campo",
     });
   }
-  static editForm = function() {
+
+  static editForm = function () {
     return {
       components: [
         {
           type: "textfield",
           input: true,
-          label: "Label",
+          label: "Título",
           weight: 12,
-          key: "label"
+          key: "titulo"
         },
         {
           type: "textfield",
           input: true,
-          label: "Nome",
+          label: "Placeholder",
           weight: 12,
           key: "nome"
-        },
-        {
-          type: "textfield",
-          input: true,
-          label: "Identificador",
-          weight: 12,
-          key: "identificador",
-        },
-        {
-          type: "checkbox",
-          input: true,
-          label: "Obrigatório",
-          weight: 12,
-          key: "obrigatorio",
         },
         {
           type: "number",
@@ -99,13 +151,6 @@ export default class TextField extends ReactComponent {
         {
           type: "textfield",
           input: true,
-          label: "Classe",
-          weight: 12,
-          key: "classe",
-        },
-        {
-          type: "textfield",
-          input: true,
           label: "Mensagem de Ajuda",
           weight: 12,
           key: "mensagemAjuda",
@@ -113,10 +158,25 @@ export default class TextField extends ReactComponent {
         {
           type: "checkbox",
           input: true,
+          label: "Obrigatório",
+          weight: 12,
+          key: "obrigatorio",
+        },
+        {
+          type: "checkbox",
+          input: true,
+          label: "Rastrear",
+          weight: 12,
+          key: "rastrear",
+        },
+        {
+          type: "checkbox",
+          input: true,
           label: "Reaproveitar Resposta Anterior",
           weight: 12,
           key: "reaproveitar",
-        }]
+        },
+      ]
     };
   }
 

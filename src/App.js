@@ -14,20 +14,20 @@ function App() {
         onChange={(schema) => setSchema(schema)}
         options={{
           // noNewEdit: true,
-	        noDefaultSubmitButton: true,
+          noDefaultSubmitButton: true,
           language: 'pt',
           i18n: {
-          pt: {
-            'Drag and Drop a form component': 'Arrate os itens para formar o formulario',
-            'Search field(s)': 'Procure os campo(s)',
-            'Component': '',
-            'Save': 'Salvar',
-            'Cancel': 'Cancelar',
-            'Remove': 'Remover',
-            'Preview': 'Pré-visualização',
-            'Help': 'Ajuda',
-            'Copy': 'Copiar',
-            'Edit': 'Editar',
+            pt: {
+              'Drag and Drop a form component': 'Arrate os itens para formar o formulario',
+              'Search field(s)': 'Procure os campo(s)',
+              'Component': '',
+              'Save': 'Salvar',
+              'Cancel': 'Cancelar',
+              'Remove': 'Remover',
+              'Preview': 'Pré-visualização',
+              'Help': 'Ajuda',
+              'Copy': 'Copiar',
+              'Edit': 'Editar',
             }
           },
           builder: {
@@ -42,8 +42,8 @@ function App() {
                 subformularioFieldCustomComp: true,
                 radioFieldCustomComp: true,
                 inputFileFieldCustomComp: true
-              }
-            },  
+              },
+            },
             basic: false,
             advanced: false,
             resource: false,
