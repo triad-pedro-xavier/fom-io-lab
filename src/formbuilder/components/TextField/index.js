@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import 'bootstrap/dist/js/bootstrap.bundle'
 import { ReactComponent } from "@formio/react/";
 
 const TextFieldCustomComp = class extends Component {
@@ -63,13 +64,12 @@ const TextFieldCustomComp = class extends Component {
       maxErrorEl.classList.remove('d-none');
       prevEl.classList.add('is-invalid');
     }
-
   }
 
   render() {
     return (
       <div>
-        <div className="d-flex" style={{height: '30px', gap: '5px'}}>
+        <div className="d-flex" style={{ height: '30px', gap: '5px' }}>
           <p>{this.state.component.titulo}</p>
           <span ref={this.obrigatorioLabel} style={{ color: 'red' }}>*</span>
           <i ref={this.rastrearLabel} class="bi bi-geo-alt-fill" ></i>
