@@ -12,6 +12,7 @@ const TextFieldCustomComp = class extends Component {
     this.obrigatorioLabel = React.createRef();
     this.rastrearLabel = React.createRef();
     this.reaproveitarLabel = React.createRef();
+    this.ajudaLabel = React.createRef();
 
     this.state = {
       value: props.value || props.component.valorPadrao,
@@ -40,6 +41,9 @@ const TextFieldCustomComp = class extends Component {
 
     if (this.state.component.reaproveitar) this.reaproveitarLabel.current.classList.remove('d-none');
     else this.reaproveitarLabel.current.classList.add('d-none');
+
+    if (this.state.component.mensagemAjuda) this.ajudaLabel.current.classList.remove('d-none');
+    else this.ajudaLabel.current.classList.add('d-none');
 
   }
 
@@ -74,6 +78,7 @@ const TextFieldCustomComp = class extends Component {
           <span ref={this.obrigatorioLabel} style={{ color: 'red' }}>*</span>
           <i ref={this.rastrearLabel} class="bi bi-geo-alt-fill" ></i>
           <i ref={this.reaproveitarLabel} class="bi bi-arrow-clockwise"></i>
+          <i ref={this.ajudaLabel} style={{cursor: 'pointer'}} title={this.state.component.mensagemAjuda} class="bi bi-question-circle-fill"></i>
         </div>
         <div>
           <input type="text" id="prev" className="form-control" placeholder={this.state.component.nome}

@@ -1,50 +1,83 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { ReactComponent } from "@formio/react";
+import 'bootstrap/dist/js/bootstrap.bundle'
+import { ReactComponent } from "@formio/react/";
 
 const RadioFieldCustomComp = class extends Component {
   constructor(props) {
     super(props);
+    this.preview = React.createRef();
+    this.obrigatorioLabel = React.createRef();
+    this.rastrearLabel = React.createRef();
+    this.reaproveitarLabel = React.createRef();
+    this.ajudaLabel = React.createRef();
+
     this.state = {
-      data: props.component.data
+      value: props.value,
+      component: props.component
     };
   }
 
-  setValue = () => {
+  setValue = (e) => {
+    const inputValue = e.target.value;
     this.setState(
-      prevState => ({ value: !prevState.value }),
-      () => this.props.onChange(null, this.state.value)
+      prevState => ({
+        ...prevState,
+        value: inputValue
+      }), () => this.props.onChange(null, this.state.value)
     );
   };
+
+  componentDidMount() {
+    if (this.state.component.obrigatorio) this.obrigatorioLabel.current.classList.remove('d-none');
+    else this.obrigatorioLabel.current.classList.add('d-none');
+
+    if (this.state.component.rastrear) this.rastrearLabel.current.classList.remove('d-none');
+    else this.rastrearLabel.current.classList.add('d-none');
+
+    if (this.state.component.reaproveitar) this.reaproveitarLabel.current.classList.remove('d-none');
+    else this.reaproveitarLabel.current.classList.add('d-none');
+
+    if (this.state.component.mensagemAjuda) this.ajudaLabel.current.classList.remove('d-none');
+    else this.ajudaLabel.current.classList.add('d-none');
+  }
 
   render() {
     return (
       <div>
-        {this.state.data && this.state.data.map(el => {
-          return <>
-            <div role="group" class="form-radio radio">
-              <div class="checkbox  form-check">
-                <label class="form-check-label label-position-right">
-                  <input role="radio" name='radio-field' value="" class="form-check-input" type="radio"/>
-                    <span>{el.label}</span>
+        <div className="d-flex" style={{ height: '30px', gap: '5px' }}>
+          <p>{this.state.component.titulo}</p>
+          <span ref={this.obrigatorioLabel} style={{ color: 'red' }}>*</span>
+          <i ref={this.rastrearLabel} class="bi bi-geo-alt-fill" ></i>
+          <i ref={this.reaproveitarLabel} class="bi bi-arrow-clockwise"></i>
+          <i ref={this.ajudaLabel} style={{ cursor: 'pointer' }} title={this.state.component.mensagemAjuda} class="bi bi-question-circle-fill"></i>
+        </div>
+        <div>
+          {this.state.component.opcoes &&
+            this.state.component.opcoes.map(op => (
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radioPreview" id={`${op.titulo}-id`}
+                  onChange={this.setValue} value={op.titulo} ref={this.preview} checked={this.state.component.valorPadrao === op.titulo}/>
+                <label class="form-check-label" for={`${op.titulo}-id`}>
+                  {op.titulo}
                 </label>
               </div>
-            </div>
-          </>
-        })}
+            ))}
+        </div>
       </div>
     );
   }
 };
 
 export default class RadioField extends ReactComponent {
+
   static get builderInfo() {
     return {
       title: "Grupo de Opções",
       icon: "square",
       group: "Data",
       documentation: "",
-      weight: -10,
+      weight: 12,
       schema: RadioField.schema()
     };
   }
@@ -52,46 +85,49 @@ export default class RadioField extends ReactComponent {
   static schema() {
     return ReactComponent.schema({
       type: "radioFieldCustomComp",
-      label: "Nome do Campo",
     });
   }
+
   static editForm = function () {
     return {
       components: [
         {
           type: "textfield",
           input: true,
-          label: "Label",
+          label: "Título",
           weight: 12,
-          key: "label"
+          key: "titulo"
         },
         {
-          type: "textfield",
+          type: 'datagrid',
           input: true,
-          label: "Nome",
-          weight: 12,
-          key: "nome"
+          label: 'Opções',
+          key: 'opcoes',
+          weight: 10,
+          reorder: true,
+          components: [{
+            label: 'Nome',
+            key: 'titulo',
+            input: true,
+            type: 'textfield'
+          }]
         },
         {
-          type: "textfield",
+          type: "select",
           input: true,
-          label: "Identificador",
+          label: "Valor Padrão",
           weight: 12,
-          key: "identificador",
-        },
-        {
-          type: "checkbox",
-          input: true,
-          label: "Obrigatório",
-          weight: 12,
-          key: "obrigatorio",
-        },
-        {
-          type: "textfield",
-          input: true,
-          label: "Classe",
-          weight: 12,
-          key: "classe",
+          key: "valorPadrao",
+          dataSrc: 'custom',
+          data: {
+            custom: function custom(context) {
+              var values = [];
+              for (let op of context.data.opcoes) {
+                values.push(op.titulo);
+              }
+              return values;
+            }
+          },
         },
         {
           type: "textfield",
@@ -101,33 +137,29 @@ export default class RadioField extends ReactComponent {
           key: "mensagemAjuda",
         },
         {
-          type: 'datagrid',
+          type: "checkbox",
           input: true,
-          label: 'Opções',
-          key: 'data',
-          weight: 10,
-          reorder: true,
-          components: [{
-            label: 'Label',
-            key: 'label',
-            input: true,
-            type: 'textfield'
-          }, {
-            label: 'Valor',
-            key: 'value',
-            input: true,
-            type: 'textfield',
-          }]
+          label: "Obrigatório",
+          weight: 12,
+          key: "obrigatorio"
+        },
+        {
+          type: "checkbox",
+          input: true,
+          label: "Rastrear",
+          weight: 12,
+          key: "rastrear",
         },
         {
           type: "checkbox",
           input: true,
           label: "Reaproveitar Resposta Anterior",
           weight: 12,
-          key: "reaproveitar",
-        },]
+          key: "reaproveitar"
+        },
+      ]
     };
-  }
+  };
 
   attachReact(element) {
     return ReactDOM.render(
@@ -145,4 +177,5 @@ export default class RadioField extends ReactComponent {
       ReactDOM.unmountComponentAtNode(element);
     }
   }
+
 }
